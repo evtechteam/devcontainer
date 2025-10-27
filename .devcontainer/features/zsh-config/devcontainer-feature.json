@@ -6,8 +6,8 @@
   "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/zsh-config",
   "options": {
     "historySize": {
-      "type": "number",
-      "default": 10000,
+      "type": "string",
+      "default": "10000",
       "description": "Number of commands to keep in history"
     },
     "enableCompletion": {
@@ -16,12 +16,9 @@
       "description": "Enable zsh auto-completion"
     },
     "aliases": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "default": ["ls=lsd", "ll=lsd -la", "la=lsd -a", "lt=lsd --tree", "lg=lazygit", "cat=bat"],
-      "description": "Array of aliases in format: name=command"
+      "type": "string",
+      "default": "ls=lsd,ll=lsd -la,la=lsd -a,lt=lsd --tree,lg=lazygit,cat=bat",
+      "description": "Comma-separated list of aliases in format: name=command"
     }
   },
   "installsAfter": [

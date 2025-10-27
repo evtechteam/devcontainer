@@ -6,20 +6,14 @@
   "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/pkgx",
   "options": {
     "packages": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Array of packages to install (full install)",
-      "default": []
+      "type": "string",
+      "description": "Comma-separated list of packages to install (full install)",
+      "default": ""
     },
     "shims": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "description": "Array of packages to shim (lightweight, download on-demand)",
-      "default": []
+      "type": "string",
+      "description": "Comma-separated list of packages to shim (lightweight, download on-demand)",
+      "default": ""
     }
   },
   "installsAfter": [

@@ -13,35 +13,13 @@
       "preset": "catppuccin-powerline"
     },
     "./features/pkgx": {
-      "packages": [
-        "lsd",
-        "bat",
-        "nano",
-        "node"
-      ],
-      "shims": [
-        "lazygit",
-        "yq",
-        "jq",
-        "htop",
-        "tree",
-        "sops",
-        "kubectl",
-        "kubecolor"
-      ]
+      "packages": "lsd,bat,nano,node",
+      "shims": "lazygit,yq,jq,htop,tree,sops,kubectl,kubecolor"
     },
     "./features/zsh-config": {
-      "historySize": 10000,
+      "historySize": "10000",
       "enableCompletion": true,
-      "aliases": [
-        "ls=lsd",
-        "ll=lsd -la",
-        "la=lsd -a",
-        "lt=lsd --tree",
-        "lg=lazygit",
-        "cat=bat",
-        "k=kubecolor"
-      ]
+      "aliases": "ls=lsd,ll=lsd -la,la=lsd -a,lt=lsd --tree,lg=lazygit,cat=bat,k=kubecolor"
     }
   },
   "containerEnv": {
