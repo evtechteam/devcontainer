@@ -1,0 +1,31 @@
+{
+  "id": "starship-config",
+  "version": "1.0.0",
+  "name": "Starship Configuration",
+  "description": "Configures Starship prompt with a preset theme and initializes it in zsh",
+  "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/starship-config",
+  "options": {
+    "preset": {
+      "type": "string",
+      "enum": [
+        "bracketed-segments",
+        "catppuccin-powerline",
+        "gruvbox-rainbow",
+        "jetpack",
+        "nerd-font-symbols",
+        "no-nerd-font",
+        "no-runtime-versions",
+        "pastel-powerline",
+        "plain-text-symbols",
+        "pure-preset",
+        "tokyo-night"
+      ],
+      "default": "catppuccin-powerline",
+      "description": "Starship preset theme to use"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainer-community/devcontainer-features/starship.rs",
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

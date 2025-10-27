@@ -1,0 +1,76 @@
+{
+  "name": "Development Container",
+  "image": "codercom/code-server:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": false,
+      "upgradePackages": true,
+      "username": "coder"
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {},
+    "./features/starship-config": {
+      "preset": "catppuccin-powerline"
+    },
+    "./features/pkgx": {
+      "packages": [
+        "lsd",
+        "bat",
+        "nano",
+        "node"
+      ],
+      "shims": [
+        "lazygit",
+        "yq",
+        "jq",
+        "htop",
+        "tree",
+        "sops",
+        "kubectl",
+        "kubecolor"
+      ]
+    },
+    "./features/zsh-config": {
+      "historySize": 10000,
+      "enableCompletion": true,
+      "aliases": [
+        "ls=lsd",
+        "ll=lsd -la",
+        "la=lsd -a",
+        "lt=lsd --tree",
+        "lg=lazygit",
+        "cat=bat",
+        "k=kubecolor"
+      ]
+    }
+  },
+  "containerEnv": {
+    "PASSWORD": "devcontainer"
+  },
+  "postCreateCommand": "echo 'Devcontainer ready! Node.js version:' && node --version && echo 'Shell: ' && echo $SHELL",
+  "postStartCommand": "code-server --bind-addr 0.0.0.0:8080 --auth password",
+  "remoteUser": "coder",
+  "runArgs": ["-p=8080:8080"],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mitchdenny.ecdc",
+        "anthropic.claude-code",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eamodio.gitlens",
+        "johnpapa.vscode-peacock"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "editor.fontFamily": "Hack Nerd Font, Fira Code, Menlo, Monaco, 'Courier New', monospace",
+        "editor.tabSize": 4,
+        "window.autoDetectColorScheme": true
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "id": "zsh-config",
+  "version": "1.0.0",
+  "name": "Zsh Configuration",
+  "description": "Configures zsh with history settings, auto-completion, and custom aliases",
+  "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/zsh-config",
+  "options": {
+    "historySize": {
+      "type": "number",
+      "default": 10000,
+      "description": "Number of commands to keep in history"
+    },
+    "enableCompletion": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable zsh auto-completion"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": ["ls=lsd", "ll=lsd -la", "la=lsd -a", "lt=lsd --tree", "lg=lazygit", "cat=bat"],
+      "description": "Array of aliases in format: name=command"
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}

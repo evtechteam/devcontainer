@@ -1,0 +1,28 @@
+{
+  "id": "pkgx",
+  "version": "1.0.0",
+  "name": "pkgx Package Installer",
+  "description": "Installs and shims packages via pkgx/pkgm",
+  "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/pkgx",
+  "options": {
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of packages to install (full install)",
+      "default": []
+    },
+    "shims": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of packages to shim (lightweight, download on-demand)",
+      "default": []
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
