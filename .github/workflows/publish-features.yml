@@ -1,0 +1,37 @@
+name: Release Dev Container Features
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.devcontainer/features/**'
+
+jobs:
+  publish:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Publish Features
+        uses: devcontainers/action@v1
+        with:
+          publish-features: "true"
+          base-path-to-features: ".devcontainer/features"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish summary
+        run: |
+          echo "✅ Dev Container features published successfully!"
+          echo "📦 Features available at: ghcr.io/evtechteam/devcontainer/features"
+          echo "📚 Published features:"
+          echo "  - pkgx"
+          echo "  - starship-config"
+          echo "  - zsh-config"
