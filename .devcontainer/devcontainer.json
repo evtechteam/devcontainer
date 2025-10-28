@@ -8,13 +8,13 @@
       "upgradePackages": true,
       "username": "coder"
     },
-    "ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {},
+    // "ghcr.io/devcontainer-community/devcontainer-features/starship.rs:1": {},
     "./features/starship-config": {
       "preset": "catppuccin-powerline"
     },
     "./features/pkgx": {
-      "packages": "lsd,bat,nano,node",
-      "shims": "lazygit,yq,jq,htop,tree,sops,kubectl,kubecolor"
+      "packages": "lsd,bat,nano,starship",
+      "shims": "lazygit,yq,jq,htop,tree,sops,kubectl,kubecolor,node"
     },
     "./features/zsh-config": {
       "historySize": "10000",
