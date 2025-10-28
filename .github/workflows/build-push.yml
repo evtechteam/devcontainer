@@ -43,7 +43,8 @@ jobs:
           cacheFrom: ghcr.io/evtechteam/devcontainer
           push: always
           imageTag: ${{ github.sha }}
-          platform: linux/amd64,linux/arm64
+          platform: linux/amd64
+          # ,linux/arm64
 
       - name: Image summary
         run: |
