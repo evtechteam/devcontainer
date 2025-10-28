@@ -42,7 +42,7 @@ jobs:
           imageName: ghcr.io/evtechteam/devcontainer
           cacheFrom: ghcr.io/evtechteam/devcontainer
           push: always
-          imageTag: latest,${{ github.sha }}
+          imageTag: ${{ github.sha }}
           platform: linux/amd64,linux/arm64
 
       - name: Image summary
