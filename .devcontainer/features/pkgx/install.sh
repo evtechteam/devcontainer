@@ -1,5 +1,10 @@
 #!/bin/bash
 set -e
+set +h  # Disable command hashing to reduce memory usage
+
+# Optimize memory usage
+unset HISTFILE  # Disable history file
+export BASH_ENV=""  # Don't load bash configs
 
 echo "============================================"
 echo "Installing packages via pkgx/pkgm..."
@@ -49,7 +54,15 @@ if [ -n "$PACKAGES" ]; then
 
     if [ -n "$pkg" ]; then
       echo "Installing $pkg..."
-      pkgm install "$pkg" || echo "Warning: Failed to install $pkg"
+      # Run in subshell with minimal environment for better cleanup
+      (
+        unset HISTFILE
+        export SHELL=/bin/bash
+        export BASH_ENV=""
+        pkgm install "$pkg"
+      ) || echo "Warning: Failed to install $pkg"
+      # Small delay to allow cleanup
+      sleep 1
     fi
   done
 
@@ -72,7 +85,13 @@ if [ -n "$SHIMS" ]; then
 
     if [ -n "$pkg" ]; then
       echo "Shimming $pkg..."
-      pkgm shim "$pkg" || echo "Warning: Failed to shim $pkg"
+      # Run in subshell with minimal environment
+      (
+        unset HISTFILE
+        export SHELL=/bin/bash
+        export BASH_ENV=""
+        pkgm shim "$pkg"
+      ) || echo "Warning: Failed to shim $pkg"
     fi
   done
 
