@@ -19,6 +19,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,19 +41,47 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare platform tag
+        id: platform
+        run: |
+          PLATFORM_TAG=$(echo "${{ matrix.platform }}" | sed 's/linux\///')
+          echo "tag=${PLATFORM_TAG}" >> $GITHUB_OUTPUT
+
       - name: Build and push devcontainer
         uses: devcontainers/ci@v0.3
         with:
           imageName: ghcr.io/evtechteam/devcontainer
           cacheFrom: ghcr.io/evtechteam/devcontainer
           push: always
-          imageTag: ${{ github.sha }}
-          platform: linux/amd64
-          # ,linux/arm64
+          imageTag: ${{ steps.platform.outputs.tag }}-${{ github.sha }}
+          platform: ${{ matrix.platform }}
 
-      - name: Image summary
+      - name: Build summary
         run: |
-          echo "✅ Devcontainer image built and pushed successfully!"
+          echo "✅ Built ${{ matrix.platform }} successfully!"
+          echo "🏷️  Tag: ghcr.io/evtechteam/devcontainer:${{ steps.platform.outputs.tag }}-${{ github.sha }}"
+
+  manifest:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create and push multi-arch manifest
+        run: |
+          docker buildx imagetools create -t ghcr.io/evtechteam/devcontainer:latest \
+            -t ghcr.io/evtechteam/devcontainer:${{ github.sha }} \
+            ghcr.io/evtechteam/devcontainer:amd64-${{ github.sha }} \
+            ghcr.io/evtechteam/devcontainer:arm64-${{ github.sha }}
+
+      - name: Manifest summary
+        run: |
+          echo "✅ Multi-arch manifest created successfully!"
           echo "📦 Image: ghcr.io/evtechteam/devcontainer:latest"
           echo "🏷️  Tag: ghcr.io/evtechteam/devcontainer:${{ github.sha }}"
           echo "🏗️  Architectures: linux/amd64, linux/arm64"
