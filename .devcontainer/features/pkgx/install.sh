@@ -10,6 +10,17 @@ echo "============================================"
 echo "Installing packages via pkgx/pkgm..."
 echo "============================================"
 
+# Debug information
+echo ""
+echo "=== Debug Information ==="
+echo "Architecture: $(uname -m)"
+echo "Bash version: $BASH_VERSION"
+echo "Bash path: $(which bash)"
+echo "Memory info:"
+free -h 2>/dev/null || echo "free command not available"
+echo "========================="
+echo ""
+
 # Calculate home directory if not provided
 if [ -z "$_CONTAINER_USER_HOME" ]; then
   if [ -n "$_REMOTE_USER" ]; then
@@ -38,6 +49,15 @@ else
   echo "✓ pkgx already installed"
 fi
 
+# Show pkgx information
+echo ""
+echo "pkgx path: $(which pkgx 2>/dev/null || echo 'not found')"
+echo "pkgm path: $(which pkgm 2>/dev/null || echo 'not found')"
+if command -v pkgm &> /dev/null; then
+  echo "pkgm version: $(pkgm --version 2>&1 || echo 'unknown')"
+fi
+echo ""
+
 # Process packages for full installation
 # Note: Arrays from devcontainer.json are passed as comma-separated strings
 if [ -n "$PACKAGES" ]; then
@@ -53,16 +73,30 @@ if [ -n "$PACKAGES" ]; then
     pkg=$(echo "$pkg" | xargs)
 
     if [ -n "$pkg" ]; then
-      echo "Installing $pkg..."
+      echo ""
+      echo ">>> Installing package: $pkg"
+      echo "Memory before install:"
+      free -h 2>/dev/null || echo "N/A"
+
       # Run in subshell with minimal environment for better cleanup
-      (
+      if (
+        set -x  # Show commands being run
         unset HISTFILE
         export SHELL=/bin/bash
         export BASH_ENV=""
+        echo "Using bash: $(which bash)"
         pkgm install "$pkg"
-      ) || echo "Warning: Failed to install $pkg"
+      ); then
+        echo "✓ Successfully installed $pkg"
+      else
+        echo "✗ Failed to install $pkg (exit code: $?)"
+      fi
+
+      echo "Memory after install:"
+      free -h 2>/dev/null || echo "N/A"
+
       # Small delay to allow cleanup
-      sleep 1
+      sleep 2
     fi
   done
 
