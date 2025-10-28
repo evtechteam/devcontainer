@@ -12,8 +12,8 @@
       "preset": "catppuccin-powerline"
     },
     "./features/pkgx": {
-      "packages": "lsd",
-      "shims": "lazygit,yq,jq,htop,tree,sops,kubectl,kubecolor,node"
+      "packages": "",
+      "shims": "lsd,bat,nano,starship,lazygit,yq,jq,htop,tree,sops,kubectl,kubecolor,node"
     },
     "./features/zsh-config": {
       "historySize": "10000",
