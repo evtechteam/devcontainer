@@ -53,9 +53,41 @@ fi
 echo ""
 echo "pkgx path: $(which pkgx 2>/dev/null || echo 'not found')"
 echo "pkgm path: $(which pkgm 2>/dev/null || echo 'not found')"
+
+# CRITICAL: Prevent pkgx from installing its bundled bash (which crashes on ARM64)
+# Set environment variables BEFORE running pkgm commands
+export PKGX_BASH_PATH=/bin/bash
+export SHELL=/bin/bash
+
 if command -v pkgm &> /dev/null; then
-  echo "pkgm version: $(pkgm --version 2>&1 || echo 'unknown')"
+  echo "pkgm version: $(SHELL=/bin/bash pkgm --version 2>&1 || echo 'unknown')"
 fi
+
+# Apply workaround IMMEDIATELY after pkgm initializes (which may install bash)
+if [ -d "$HOME/.pkgx/gnu.org/bash" ]; then
+  echo "Detected pkgx bundled bash - applying ARM64 crash workaround"
+
+  # Create wrapper script to redirect broken bash to system bash
+  PKGX_BASH_DIR="$HOME/.pkgx/gnu.org/bash"
+  for bash_bin in "$PKGX_BASH_DIR"/*/bin/bash; do
+    if [ -f "$bash_bin" ] && [ ! -L "$bash_bin" ]; then
+      echo "  Replacing $bash_bin with system bash wrapper"
+      mv "$bash_bin" "${bash_bin}.broken" 2>/dev/null || true
+      cat > "$bash_bin" << 'WRAPPER_EOF'
+#!/bin/bash
+# Wrapper: redirects to system bash to avoid ARM64 hash table crash
+exec /bin/bash "$@"
+WRAPPER_EOF
+      chmod +x "$bash_bin"
+    fi
+  done
+
+  # Remove from PATH
+  export PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.pkgx/gnu\.org/bash' | tr '\n' ':' | sed 's/:$//')
+  echo "  ✓ Workaround applied successfully"
+fi
+
+echo "Active bash: $(which bash)"
 echo ""
 
 # Process packages for full installation
@@ -84,7 +116,11 @@ if [ -n "$PACKAGES" ]; then
         unset HISTFILE
         export SHELL=/bin/bash
         export BASH_ENV=""
+        export PKGX_BASH_PATH=/bin/bash
+        # Ensure pkgx bundled bash is not in PATH
+        export PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.pkgx/gnu\.org/bash' | tr '\n' ':' | sed 's/:$//')
         echo "Using bash: $(which bash)"
+        echo "PATH: $PATH"
         pkgm install "$pkg"
       ); then
         echo "✓ Successfully installed $pkg"
