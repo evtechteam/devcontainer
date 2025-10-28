@@ -1,6 +1,6 @@
 {
   "id": "pkgx",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "pkgx Package Installer",
   "description": "Installs and shims packages via pkgx/pkgm",
   "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/pkgx",

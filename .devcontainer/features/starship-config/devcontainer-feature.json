@@ -1,6 +1,6 @@
 {
   "id": "starship-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Starship Configuration",
   "description": "Configures Starship prompt with a preset theme and initializes it in zsh",
   "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/starship-config",

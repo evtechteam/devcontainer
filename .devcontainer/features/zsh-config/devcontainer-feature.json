@@ -1,6 +1,6 @@
 {
   "id": "zsh-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Zsh Configuration",
   "description": "Configures zsh with history settings, auto-completion, and custom aliases",
   "documentationURL": "https://github.com/evtechteam/devcontainer/tree/main/.devcontainer/features/zsh-config",
