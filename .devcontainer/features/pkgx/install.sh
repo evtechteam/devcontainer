@@ -5,10 +5,18 @@ echo "============================================"
 echo "Installing packages via pkgx/pkgm..."
 echo "============================================"
 
-# Validate _CONTAINER_USER_HOME is set
+# Calculate home directory if not provided
 if [ -z "$_CONTAINER_USER_HOME" ]; then
-  echo "Error: _CONTAINER_USER_HOME is not set"
-  exit 1
+  if [ -n "$_REMOTE_USER" ]; then
+    if [ "$_REMOTE_USER" = "root" ]; then
+      _CONTAINER_USER_HOME="/root"
+    else
+      _CONTAINER_USER_HOME="/home/${_REMOTE_USER}"
+    fi
+  else
+    echo "Error: Neither _CONTAINER_USER_HOME nor _REMOTE_USER is set"
+    exit 1
+  fi
 fi
 
 echo "Using home directory: $_CONTAINER_USER_HOME"

@@ -5,10 +5,18 @@ echo "============================================"
 echo "Configuring Starship prompt..."
 echo "============================================"
 
-# Validate _CONTAINER_USER_HOME is set
+# Calculate home directory if not provided
 if [ -z "$_CONTAINER_USER_HOME" ]; then
-  echo "Error: _CONTAINER_USER_HOME is not set"
-  exit 1
+  if [ -n "$_REMOTE_USER" ]; then
+    if [ "$_REMOTE_USER" = "root" ]; then
+      _CONTAINER_USER_HOME="/root"
+    else
+      _CONTAINER_USER_HOME="/home/${_REMOTE_USER}"
+    fi
+  else
+    echo "Error: Neither _CONTAINER_USER_HOME nor _REMOTE_USER is set"
+    exit 1
+  fi
 fi
 
 echo "Using home directory: $_CONTAINER_USER_HOME"
@@ -23,9 +31,7 @@ mkdir -p "$_CONTAINER_USER_HOME/.config"
 
 # Download the preset configuration
 echo "Downloading preset from starship.rs..."
-wget -q -O "$_CONTAINER_USER_HOME/.config/starship.toml" "https://starship.rs/presets/toml/${PRESET}.toml"
-
-if [ $? -eq 0 ]; then
+if wget -q -O "$_CONTAINER_USER_HOME/.config/starship.toml" "https://starship.rs/presets/toml/${PRESET}.toml"; then
   echo "✓ Starship preset '$PRESET' installed successfully"
 else
   echo "⚠ Failed to download preset, using default configuration"
