@@ -44,7 +44,19 @@ export PATH="$_CONTAINER_USER_HOME/.local/bin:/usr/local/bin:$PATH"
 # This is a fallback in case it's not available
 if ! command -v pkgx &> /dev/null; then
   echo "Warning: pkgx not found, installing..."
-  curl https://pkgx.sh | sh
+
+  # Use direct binary download instead of the Deno-based installer
+  # which has issues with newer Deno versions
+  echo "Downloading pkgx binary for $(uname)/$(uname -m)..."
+
+  # Download and extract directly to /usr/local/bin
+  if curl -Ssf "https://pkgx.sh/$(uname)/$(uname -m).tgz" | tar xz -C /usr/local/bin 2>/dev/null; then
+    echo "✓ pkgx installed successfully via binary download"
+  else
+    echo "Error: Failed to install pkgx"
+    echo "Please check https://docs.pkgx.sh/pkgx/installing-pkgx for manual installation"
+    exit 1
+  fi
 else
   echo "✓ pkgx already installed"
 fi
